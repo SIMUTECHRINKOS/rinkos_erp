@@ -207,6 +207,46 @@ feat/{nombre} → nuevas funcionalidades
 fix/{nombre}  → correcciones
 ```
 
+### Responsabilidades Git — Claude Code las ejecuta, el desarrollador no necesita hacerlas
+
+Claude Code es responsable de todas las operaciones Git y de despliegue. El desarrollador
+no necesita correr comandos de git ni de Render manualmente.
+
+**Al cerrar cada sesión de trabajo, Claude Code debe:**
+1. Stagear los archivos modificados (`git add`)
+2. Hacer commit con mensaje en formato convencional (en español)
+3. Hacer push a la rama correspondiente (`git push`)
+4. Confirmar al desarrollador que el push fue exitoso
+
+**Reglas de push automático:**
+- `main` → solo cuando la sesión fue revisada y aprobada por el desarrollador
+- `develop` → al cierre de cada sesión de trabajo
+- Nunca hacer `git push --force` a `main`
+- Siempre informar el hash del commit y los archivos incluidos
+
 ---
 
-*Versión: 1.0 | Proyecto: RINKOS ERP | Actualizar con cada decisión de arquitectura nueva*
+## 7. Render (Despliegue)
+
+Claude Code gestiona los despliegues. El desarrollador no necesita acceder al dashboard de Render manualmente salvo para configuración inicial de servicios.
+
+### Servicios en Render
+```
+rinkos-backend   → Web Service (FastAPI) — rama: main
+rinkos-db        → PostgreSQL — gestionado desde Render dashboard
+```
+
+### Cuándo hacer redeploy
+- Todo push a `main` del backend dispara redeploy automático vía GitHub Actions / Render auto-deploy
+- Claude Code verifica el estado del despliegue tras cada push relevante
+- Si el despliegue falla, Claude Code diagnostica y corrige antes de informar al desarrollador
+
+### Variables de entorno
+- Nunca hardcodear secrets en el código
+- Todas las variables de entorno se declaran en `.env.example` (sin valores reales)
+- Los valores reales se configuran directamente en el dashboard de Render
+- Claude Code indica qué variables deben agregarse en Render cuando se necesiten
+
+---
+
+*Versión: 1.1 | Proyecto: RINKOS ERP | Actualizar con cada decisión de arquitectura nueva*
