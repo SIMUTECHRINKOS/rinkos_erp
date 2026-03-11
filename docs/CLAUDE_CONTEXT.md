@@ -166,6 +166,66 @@ REGLA MAESTRA:
   NUNCA levantar un bloqueo ya definido sin aprobación explícita del desarrollador.
 ```
 
+### B.6 — Modelo de Licencias y Permisos (basado en SAP Business One)
+
+```
+CONCEPTO CENTRAL: LICENCIAS, no roles.
+  El acceso al sistema se controla mediante tipos de licencia asignados a usuarios,
+  igual que en SAP Business One.
+
+TIPOS DE LICENCIA (4 — datos semilla):
+  1. Profesional  → Acceso completo a TODOS los módulos del sistema.
+                    Es el único tipo que puede configurar permisos de otros usuarios
+                    si además tiene el flag SuperUsuario = true.
+  2. Logística    → Módulos: Inventario, Compras, Ventas, Producción, Servicio Técnico.
+  3. Finanzas     → Módulos: Contabilidad, Cuentas por Cobrar (AR), Cuentas por Pagar (AP),
+                    Reportes Financieros.
+  4. CRM          → Módulos: Socios de Negocio (maestro de clientes/proveedores),
+                    CRM / Oportunidades, Actividades.
+
+CUOTA DE LICENCIAS POR TENANT:
+  - El plan de suscripción define cuántas licencias de cada tipo tiene el tenant.
+    Ej: 1 Profesional + 2 Logística + 1 Finanzas.
+  - La cuota es global para el tenant (no por compañía).
+  - El sistema lleva conteo de licencias usadas vs. disponibles por tipo.
+  - No se puede asignar más licencias de las contratadas.
+
+ASIGNACIÓN DE LICENCIAS A USUARIOS:
+  - Un usuario puede tener MÁS DE UN tipo de licencia en una misma compañía.
+  - Un usuario puede tener diferentes licencias en diferentes compañías del mismo tenant.
+  - Los módulos accesibles son la UNIÓN de todos los módulos de sus licencias.
+    Ej: usuario con Logística + CRM accede a módulos de ambas.
+  - La asignación se registra en la tabla user_company_licenses.
+  - Cada asignación consume 1 licencia del cupo del tenant por tipo.
+
+NIVELES DE PERMISO POR OBJETO/FUNCIÓN:
+  - NINGUNO  (0) → Sin acceso al objeto/función.
+  - LECTURA  (1) → Solo puede consultar / ver.
+  - TOTAL    (2) → Puede crear, actualizar y cancelar/anular.
+  - No existe un nivel intermedio entre Lectura y Total.
+
+OBJETOS CON PERMISO CONFIGURABLE (ejemplos):
+  - Maestro de Clientes: NINGUNO | LECTURA | TOTAL
+  - Factura de Ventas:   NINGUNO | LECTURA | TOTAL
+  - Orden de Compra:     NINGUNO | LECTURA | TOTAL
+  - [Se definen módulo a módulo durante el desarrollo]
+
+QUIÉN CONFIGURA LOS PERMISOS:
+  - Solo un usuario con licencia Profesional Y flag SuperUsuario = true.
+  - Los permisos se configuran POR USUARIO, dentro de los módulos
+    a los que ese usuario tiene acceso según su(s) licencia(s).
+  - Un usuario sin acceso a un módulo (por tipo de licencia) no puede
+    recibir permisos en ese módulo, independientemente de lo que configure el SuperUsuario.
+
+SUPERUSUARIO:
+  - Flag booleano en la tabla tenant_users: is_superuser.
+  - Solo aplica si el usuario también tiene licencia Profesional.
+  - Capacidades exclusivas del SuperUsuario Profesional:
+      * Gestionar licencias de usuarios
+      * Configurar permisos de otros usuarios
+      * Acceder a configuración del sistema
+```
+
 ---
 
 ## 1. IDENTIDAD DEL PROYECTO
@@ -514,6 +574,10 @@ Reglas:
 | 2026-03-11 | MVP: primero web completo, luego Flutter mobile | App Flutter se desarrolla después del frontend web. |
 | 2026-03-11 | Autenticación: JWT propio en FastAPI | Módulo auth/ con python-jose. Sin servicios externos (Auth0, Supabase Auth, Clerk, etc.). |
 | 2026-03-11 | Repositorio GitHub: SIMUTECHRINKOS/rinkos_erp | https://github.com/SIMUTECHRINKOS/rinkos_erp.git |
+| 2026-03-11 | Control de acceso: modelo de licencias SAP B1 | 4 tipos: Profesional, Logística, Finanzas, CRM. Cuota por tenant. Permisos por usuario. Ver Sección B.6. |
+| 2026-03-11 | Permisos: 3 niveles por objeto | NINGUNO / LECTURA / TOTAL (Total incluye crear, actualizar y cancelar). |
+| 2026-03-11 | SuperUsuario Profesional gestiona permisos | Solo licencia Profesional + is_superuser=true puede configurar permisos de otros usuarios. |
+| 2026-03-11 | Plan incluye cuota de licencias por tipo | El plan de suscripción define cuántas licencias de cada tipo tiene el tenant. |
 
 ---
 
@@ -524,7 +588,7 @@ NO implementar nada relacionado hasta tener respuesta:
 
 - [x] ~~¿Países de lanzamiento inicial?~~ → RD (DGII). Sistema 100% configurable para cualquier país.
 - [x] ~~¿Método de valorización de inventario?~~ → FIFO y Promedio Ponderado, configurable por empresa. Ver Sección B.2.
-- [ ] ¿Cuál es la estructura de roles y permisos específica de RINKOS ERP? (definir en Fase 1B)
+- [x] ~~¿Cuál es la estructura de roles y permisos específica de RINKOS ERP?~~ → Modelo de licencias SAP B1. Ver Sección B.6.
 - [x] ~~¿Facturación electrónica en MVP?~~ → Etapa 2, vía tercero (API proveedor DGII), configurable.
 - [x] ~~¿Cómo se forma el número de asiento?~~ → INT incremental por empresa. Ver Sección B.3.
 - [x] ~~¿Asientos en período cerrado?~~ → Permitido reabriendo el período. Ver Sección B.4.
@@ -533,8 +597,10 @@ NO implementar nada relacionado hasta tener respuesta:
 - [x] ~~¿Moneda base del sistema?~~ → Multimoneda: LC + SY + FC. Ver Sección B.1.
 - [x] ~~¿Cómo se activan los módulos SaaS?~~ → Planes predefinidos (Basic/Pro/Enterprise) + selección custom.
 - [x] ~~¿MVP incluye Flutter desde el inicio?~~ → No. Primero web completo, luego Flutter.
+- [x] ~~Estructura de licencias y permisos~~ → 4 tipos: Profesional/Logística/Finanzas/CRM. Ver Sección B.6.
 - [ ] Reglas de bloqueo adicionales por módulo (se definen módulo a módulo durante el desarrollo)
-- [ ] Estructura de roles y permisos de RINKOS ERP (definir en Fase 1B)
+- [ ] Catálogo completo de objetos con permisos configurables por módulo (se define en Fase 1B)
+- [ ] Cuota de licencias por tipo en cada plan de suscripción (Basic/Pro/Enterprise) — definir en Fase 1B
 
 ---
 
@@ -569,5 +635,5 @@ NO implementar nada relacionado hasta tener respuesta:
 
 ---
 
-*Versión: 1.7 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
+*Versión: 1.8 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
 *Este documento es la autoridad máxima del proyecto. Actualizar en cada sesión.*
