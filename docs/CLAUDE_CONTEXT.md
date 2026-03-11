@@ -441,17 +441,29 @@ exchange_rates (
 ## 7. MODELO MULTI-TENANT
 
 ```
-Schema 'public' (sistema):
-  - tenants
-  - tenant_users
-  - subscription_plans
-  - audit_log
+JERARQUÍA:
+  Tenant (cliente/organización)
+    └── Companies (empresas, 1..N por tenant)
+          └── Schema PostgreSQL propio por empresa
 
-Schema 'rinkos_{tenant_code}' (por empresa):
+Schema 'public' (sistema global):
+  - subscription_plans   → planes de suscripción (seeds: Basic/Pro/Enterprise)
+  - tenants              → organizaciones clientes
+  - companies            → empresas dentro de cada tenant
+  - tenant_users         → usuarios del sistema
+  - user_company_access  → qué empresas puede usar cada usuario
+  - audit_log            → auditoría global
+
+Schema 'rinkos_{company_code}' (por empresa):
   - accounts, fiscal_periods, journal_entries, journal_entry_lines
   - [todos los módulos operativos]
 
-Regla: search_path se establece por sesión según tenant_id del JWT.
+Reglas:
+  - El schema es por EMPRESA (company), no por tenant.
+  - search_path se establece por sesión según company_id del JWT.
+  - Un tenant puede tener N empresas; cada una tiene su schema aislado.
+  - Los planes de suscripción son datos semilla (seeds) por ahora.
+    En el futuro existirá un portal de administración para gestionar contratos.
 ```
 
 ---
@@ -461,7 +473,7 @@ Regla: search_path se establece por sesión según tenant_id del JWT.
 | Fase | Módulo                     | Prerequisito          | Estado     |
 |------|----------------------------|-----------------------|------------|
 | 0    | Fundación / Monorepo       | —                     | PENDIENTE  |
-| 1A   | Multi-Tenant + Empresas    | Fase 0                | PENDIENTE  |
+| 1A   | Multi-Tenant + Empresas    | Fase 0                | COMPLETADO — 2026-03-11 |
 | 1B   | Auth + Usuarios + Roles    | Fase 1A               | PENDIENTE  |
 | 2A   | Plan de Cuentas + Períodos | Fase 1 completa       | PENDIENTE  |
 | 2B   | Motor de Asientos (Diario) | Fase 2A               | PENDIENTE  |
@@ -485,7 +497,8 @@ Regla: search_path se establece por sesión según tenant_id del JWT.
 |------------|----------------------------------------------------|---------------------------------------------------------------|
 | 2026-03-11 | Stack: FastAPI + PostgreSQL + React/Vite + Flutter | Ecosistema, costo, dominio actual del desarrollador |
 | 2026-03-11 | Infraestructura: Render (backend + PostgreSQL) + Vercel | <$200/mes inicio. Supabase descartado. |
-| 2026-03-11 | Multi-tenant: schema-per-tenant PostgreSQL | Aislamiento total + costo |
+| 2026-03-11 | Multi-tenant: schema-per-COMPANY PostgreSQL | Un tenant tiene N empresas. Cada empresa tiene su propio schema rinkos_{company_code}. |
+| 2026-03-11 | Planes de suscripción: seeds por ahora | Basic/Pro/Enterprise como datos semilla. Futuro portal de administración para gestión de contratos. |
 | 2026-03-11 | Contabilidad como eje central, no módulo opcional | Principio arquitectónico SAP B1 |
 | 2026-03-11 | Carta gráfica y logos RINKOS recibidos | Paleta oficial + 5 variantes SVG — ver Sección A |
 | 2026-03-11 | País de lanzamiento inicial: República Dominicana | Confirmado por referencia a DGII. Sistema 100% configurable para cualquier país. |
@@ -556,5 +569,5 @@ NO implementar nada relacionado hasta tener respuesta:
 
 ---
 
-*Versión: 1.5 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
+*Versión: 1.7 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
 *Este documento es la autoridad máxima del proyecto. Actualizar en cada sesión.*
