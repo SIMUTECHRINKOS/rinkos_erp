@@ -536,30 +536,35 @@ Reglas:
 
 ## 8. MAPA DE MÓDULOS Y FASES
 
-> **Estrategia de desarrollo**: Opción B — por módulo completo.
-> Las fases 1B + 2A + 2B + 2C se desarrollan 100% en backend primero (son la columna vertebral).
-> A partir de la Fase 3A cada módulo incluye backend + frontend React antes de pasar al siguiente.
+> **Estrategia de desarrollo**: iterativa por módulo completo (backend + UI juntos).
+> El desarrollador da instrucciones paso a paso; Claude implementa y actualiza este plan.
 > Flutter Mobile se desarrolla al final, cuando el frontend web esté completo.
+>
+> **Notas importantes:**
+> - El Plan de Cuentas es definido completamente por el usuario/consultor en pantalla de Configuración.
+>   NO es un seed fijo. Los únicos fijos son los capítulos raíz (Activos, Pasivos, Capital,
+>   Costos, Ingresos, Gastos Financieros, Otros). Las cuentas control y posteable las crea el usuario.
+> - Cada fase se detalla al momento de implementarla, según instrucciones del desarrollador.
 
-| Fase  | Módulo                          | Capa             | Prerequisito            | Estado                  |
-|-------|---------------------------------|------------------|-------------------------|-------------------------|
-| 0     | Fundación / Monorepo            | —                | —                       | COMPLETADO — 2026-03-11 |
-| 1A    | Multi-Tenant + Empresas         | Backend          | Fase 0                  | COMPLETADO — 2026-03-11 |
-| 1B    | Auth + Usuarios + Licencias     | Backend          | Fase 1A                 | COMPLETADO — 2026-03-11 |
-| 2A    | Plan de Cuentas + Períodos      | Backend          | Fase 1 completa         | PENDIENTE               |
-| 2B    | Motor de Asientos (Diario)      | Backend          | Fase 2A                 | PENDIENTE               |
-| 2C    | Reportes Financieros Core       | Backend          | Fase 2B                 | PENDIENTE               |
-| 2-UI  | Frontend: Auth + Contabilidad   | Frontend React   | Fases 1B + 2A + 2B + 2C | PENDIENTE               |
-| 3A    | Cuentas por Cobrar (AR)         | Backend+Frontend | Fase 2-UI               | PENDIENTE               |
-| 3B    | Cuentas por Pagar (AP)          | Backend+Frontend | Fase 2-UI               | PENDIENTE               |
-| 4A    | Inventario / Almacenes          | Backend+Frontend | Fase 3B                 | PENDIENTE               |
-| 4B    | Compras                         | Backend+Frontend | Fases 3B + 4A           | PENDIENTE               |
-| 5A    | Ventas + CRM                    | Backend+Frontend | Fases 3A + 4A           | PENDIENTE               |
-| 6     | RRHH + Nómina                   | Backend+Frontend | Fase 2-UI + 1B          | PENDIENTE               |
-| 7     | Producción + MRP                | Backend+Frontend | Fases 4A + 5A           | PENDIENTE               |
-| 8     | Servicio Técnico                | Backend+Frontend | Fases 4A + 5A           | PENDIENTE               |
-| 9     | Integraciones + API Pública     | Backend          | Fases 3-6 estables      | PENDIENTE               |
-| M     | App Flutter                     | Mobile           | Frontend web completo   | PENDIENTE               |
+| Fase   | Módulo                                  | Capa              | Prerequisito     | Estado                  |
+|--------|-----------------------------------------|-------------------|------------------|-------------------------|
+| 0      | Fundación / Monorepo                    | —                 | —                | COMPLETADO — 2026-03-11 |
+| 1A     | Multi-Tenant + Empresas                 | Backend           | Fase 0           | COMPLETADO — 2026-03-11 |
+| 1B     | Auth + Usuarios + Licencias             | Backend           | Fase 1A          | COMPLETADO — 2026-03-11 |
+| 1B-UI  | Login multicompañía + Home              | Frontend React    | Fase 1B          | PENDIENTE ← SIGUIENTE   |
+| 2A     | Plan de Cuentas + Períodos Fiscales     | Backend+Frontend  | Fase 1B-UI       | PENDIENTE               |
+| 2B     | Motor de Asientos (Diario)              | Backend+Frontend  | Fase 2A          | PENDIENTE               |
+| 2C     | Reportes Financieros Core               | Backend+Frontend  | Fase 2B          | PENDIENTE               |
+| 3A     | Cuentas por Cobrar (AR)                 | Backend+Frontend  | Fase 2B          | PENDIENTE               |
+| 3B     | Cuentas por Pagar (AP)                  | Backend+Frontend  | Fase 2B          | PENDIENTE               |
+| 4A     | Inventario / Almacenes                  | Backend+Frontend  | Fase 3B          | PENDIENTE               |
+| 4B     | Compras                                 | Backend+Frontend  | Fases 3B + 4A    | PENDIENTE               |
+| 5A     | Ventas + CRM                            | Backend+Frontend  | Fases 3A + 4A    | PENDIENTE               |
+| 6      | RRHH + Nómina                           | Backend+Frontend  | Fase 2C          | PENDIENTE               |
+| 7      | Producción + MRP                        | Backend+Frontend  | Fases 4A + 5A    | PENDIENTE               |
+| 8      | Servicio Técnico                        | Backend+Frontend  | Fases 4A + 5A    | PENDIENTE               |
+| 9      | Integraciones + API Pública             | Backend           | Fases 3-6        | PENDIENTE               |
+| M      | App Flutter                             | Mobile            | Web completo     | PENDIENTE               |
 
 ---
 

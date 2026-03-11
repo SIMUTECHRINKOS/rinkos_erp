@@ -7,6 +7,19 @@ from pydantic import BaseModel, EmailStr, Field
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
 
+class CompaniasDisponiblesRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class CompanyOption(BaseModel):
+    id: uuid.UUID
+    code: str
+    name: str
+
+    model_config = {"from_attributes": True}
+
+
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str

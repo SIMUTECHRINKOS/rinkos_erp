@@ -1,0 +1,119 @@
+/* ─── Root ─────────────────────────────────────────────────────────────────── */
+.home-root {
+  min-height: 100vh;
+  background: #f5f3fa;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Navbar ───────────────────────────────────────────────────────────────── */
+.home-navbar {
+  background: #1c0a3f;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(28, 10, 63, 0.3);
+}
+
+.home-navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.home-logo {
+  height: 32px;
+  width: auto;
+  /* El logo LOGO_RINKOS-04 es horizontal oscuro; forzamos que se vea en blanco */
+  filter: brightness(0) invert(1);
+}
+
+.home-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-username {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.home-logout-btn {
+  color: #ffa300 !important;
+  font-weight: 500;
+}
+
+.home-logout-btn:hover {
+  color: #ffbc00 !important;
+}
+
+/* ─── Main ─────────────────────────────────────────────────────────────────── */
+.home-main {
+  flex: 1;
+  padding: 40px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.home-welcome {
+  margin-bottom: 32px;
+}
+
+/* ─── Grid de módulos ──────────────────────────────────────────────────────── */
+.home-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+.home-module-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 28px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 2px 8px rgba(28, 10, 63, 0.07);
+  border: 1px solid #ede8f5;
+}
+
+.home-module-card:hover {
+  box-shadow: 0 8px 24px rgba(104, 29, 183, 0.15);
+  transform: translateY(-2px);
+  border-color: #681db7;
+}
+
+.home-module-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #681db7 0%, #1c0a3f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-module-initial {
+  color: #ffbc00;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.home-module-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1c0a3f;
+  text-align: center;
+  line-height: 1.3;
+}

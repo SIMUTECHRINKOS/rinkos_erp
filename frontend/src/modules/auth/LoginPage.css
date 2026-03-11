@@ -1,0 +1,119 @@
+/* ─── Contenedor raíz ──────────────────────────────────────────────────────── */
+.login-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 24px;
+  position: relative;
+}
+
+/* ─── Overlay oscuro ───────────────────────────────────────────────────────── */
+.login-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 10, 63, 0.45); /* --rinkos-primary-dark con opacidad */
+  pointer-events: none;
+}
+
+/* ─── Tarjeta ──────────────────────────────────────────────────────────────── */
+.login-card {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px 36px 28px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 64px rgba(28, 10, 63, 0.25);
+  margin-right: 6vw;
+}
+
+/* ─── Logo ─────────────────────────────────────────────────────────────────── */
+.login-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.login-logo img {
+  height: 72px;
+  width: auto;
+}
+
+/* ─── Título ───────────────────────────────────────────────────────────────── */
+.login-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1c0a3f;
+  margin: 0 0 4px;
+  text-align: center;
+}
+
+.login-subtitle {
+  font-size: 13px;
+  color: #888;
+  text-align: center;
+  margin: 0 0 20px;
+}
+
+/* ─── Botón principal ──────────────────────────────────────────────────────── */
+.login-btn-primary {
+  background: #1c0a3f !important;
+  border-color: #1c0a3f !important;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  height: 44px;
+  border-radius: 8px !important;
+  transition: background 0.2s;
+}
+
+.login-btn-primary:hover {
+  background: #681db7 !important;
+  border-color: #681db7 !important;
+}
+
+/* ─── Labels del form ──────────────────────────────────────────────────────── */
+.login-card .ant-form-item-label > label {
+  font-weight: 500;
+  color: #1c0a3f;
+  font-size: 13px;
+}
+
+/* ─── Inputs ───────────────────────────────────────────────────────────────── */
+.login-card .ant-input-affix-wrapper,
+.login-card .ant-select-selector {
+  border-radius: 8px !important;
+}
+
+.login-card .ant-input-affix-wrapper:focus-within,
+.login-card .ant-select-focused .ant-select-selector {
+  border-color: #681db7 !important;
+  box-shadow: 0 0 0 2px rgba(104, 29, 183, 0.12) !important;
+}
+
+/* ─── Footer ───────────────────────────────────────────────────────────────── */
+.login-footer {
+  text-align: center;
+  font-size: 11px;
+  color: #bbb;
+  margin-top: 20px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .login-root {
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .login-card {
+    margin-right: 0;
+    padding: 32px 24px 24px;
+  }
+}

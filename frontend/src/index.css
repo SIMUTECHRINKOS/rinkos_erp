@@ -1,0 +1,32 @@
+/* ─── Reset y base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #f5f3fa;
+  color: #1c0a3f;
+}
+
+/* ─── Variables CSS — carta gráfica RINKOS ─────────────────────────────────── */
+:root {
+  --rinkos-primary-dark:  #1c0a3f;
+  --rinkos-primary:       #681db7;
+  --rinkos-gold:          #ffbc00;
+  --rinkos-amber:         #ffa300;
+  --rinkos-orange:        #ff8f00;
+  --rinkos-gradient:      linear-gradient(90deg, #ffbc00 0%, #ffb300 29%, #ff9b00 77%, #ff8f00 97%);
+  --rinkos-text-on-dark:  #ffffff;
+  --rinkos-text-primary:  #1c0a3f;
+  --rinkos-bg-light:      #f5f3fa;
+  --rinkos-surface:       #ffffff;
+}
+
+/* Scrollbar sutil */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c8b8e8; border-radius: 3px; }

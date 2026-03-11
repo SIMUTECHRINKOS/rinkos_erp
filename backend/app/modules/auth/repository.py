@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.modules.auth.models import LicenseType, PermissionObject, UserCompanyLicense, UserPermission
-from app.modules.tenants.models import TenantUser
+from app.modules.tenants.models import Company, TenantUser
 
 
 class UserRepository:
@@ -54,6 +54,28 @@ class LicenseRepository:
 
     def get_all_license_types(self) -> list[LicenseType]:
         return self.db.query(LicenseType).filter(LicenseType.is_active == True).all()  # noqa: E712
+
+    def get_companies_with_licenses(self, user_id: uuid.UUID) -> list[Company]:
+        """Retorna las compañías donde el usuario tiene al menos una licencia activa."""
+        company_ids = (
+            self.db.query(UserCompanyLicense.company_id)
+            .filter(
+                UserCompanyLicense.user_id == user_id,
+                UserCompanyLicense.is_active == True,  # noqa: E712
+            )
+            .distinct()
+            .subquery()
+        )
+        return (
+            self.db.query(Company)
+            .filter(
+                Company.id.in_(company_ids),
+                Company.is_active == True,  # noqa: E712
+                Company.deleted_at == None,  # noqa: E711
+            )
+            .order_by(Company.name)
+            .all()
+        )
 
     def get_user_licenses_in_company(
         self, user_id: uuid.UUID, company_id: uuid.UUID

@@ -74,6 +74,15 @@ class AuthService:
             modules=modules,
         )
 
+    def companias_disponibles(self, data) -> list:
+        """Valida credenciales y devuelve las compañías donde el usuario tiene licencia activa."""
+        user = self.user_repo.get_by_email(data.email)
+        if not user or not verify_password(data.password, user.hashed_password):
+            raise BusinessRuleError("Credenciales incorrectas.")
+        if not user.is_active:
+            raise BusinessRuleError("Usuario inactivo.")
+        return self.license_repo.get_companies_with_licenses(user.id)
+
     def _get_modules_from_licenses(self, licenses: list[UserCompanyLicense]) -> list[str]:
         """Devuelve la unión de módulos de todas las licencias activas."""
         modules: set[str] = set()

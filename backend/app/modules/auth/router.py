@@ -12,6 +12,8 @@ from app.core.dependencies import CurrentUser, get_current_user, require_superus
 from app.core.exceptions import BusinessRuleError, ConflictError, NotFoundError, business_rule_error, conflict, not_found
 from app.modules.auth.schemas import (
     AssignLicenseRequest,
+    CompaniasDisponiblesRequest,
+    CompanyOption,
     LicenseTypeResponse,
     LoginRequest,
     PermissionObjectResponse,
@@ -28,6 +30,15 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 # ─── Login ────────────────────────────────────────────────────────────────────
+
+@router.post("/companias-disponibles", response_model=list[CompanyOption])
+def companias_disponibles(data: CompaniasDisponiblesRequest, db: Session = Depends(get_db)):
+    """Valida credenciales y devuelve las compañías donde el usuario tiene licencia activa."""
+    try:
+        return AuthService(db).companias_disponibles(data)
+    except (BusinessRuleError, NotFoundError) as e:
+        raise business_rule_error(str(e))
+
 
 @router.post("/login", response_model=TokenResponse)
 def login(data: LoginRequest, db: Session = Depends(get_db)):
