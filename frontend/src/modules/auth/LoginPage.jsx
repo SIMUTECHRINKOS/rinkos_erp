@@ -1,12 +1,16 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Form, Input, Button, Select, Alert, Typography } from 'antd'
+import { Form, Input, Button, Select, Alert } from 'antd'
 import { MailOutlined, LockOutlined, BankOutlined, ArrowLeftOutlined } from '@ant-design/icons'
 import { authApi } from '../../api/auth'
 import { useAuthStore } from '../../store/authStore'
 import './LoginPage.css'
 
-const { Text } = Typography
+// ─── Credenciales de prueba (solo en desarrollo) ───────────────────────────
+const DEMO_USERS = [
+  { label: 'SuperUsuario', email: 'super@test.com', password: 'Pass1234' },
+  { label: 'Usuario normal', email: 'user@test.com', password: 'Pass1234' },
+]
 
 // Imágenes de fondo disponibles (en /public/images/)
 const BG_IMAGES = [
@@ -114,6 +118,26 @@ export default function LoginPage() {
 
       {/* Tarjeta de login */}
       <div className="login-card">
+        {/* Widget demo — solo en desarrollo */}
+        {import.meta.env.DEV && (
+          <div className="login-demo-widget">
+            <span className="login-demo-label">🧪 Demo</span>
+            {DEMO_USERS.map((u) => (
+              <button
+                key={u.email}
+                type="button"
+                className="login-demo-btn"
+                onClick={() => {
+                  form.setFieldsValue({ email: u.email, password: u.password })
+                  setError(null)
+                }}
+              >
+                {u.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Logo */}
         <div className="login-logo">
           <img src="/brand/LOGO_RINKOS-01.svg" alt="RINKOS ERP" />
