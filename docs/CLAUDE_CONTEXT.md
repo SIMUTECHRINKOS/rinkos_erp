@@ -530,24 +530,30 @@ Reglas:
 
 ## 8. MAPA DE MÓDULOS Y FASES
 
-| Fase | Módulo                     | Prerequisito          | Estado     |
-|------|----------------------------|-----------------------|------------|
-| 0    | Fundación / Monorepo       | —                     | PENDIENTE  |
-| 1A   | Multi-Tenant + Empresas    | Fase 0                | COMPLETADO — 2026-03-11 |
-| 1B   | Auth + Usuarios + Roles    | Fase 1A               | PENDIENTE  |
-| 2A   | Plan de Cuentas + Períodos | Fase 1 completa       | PENDIENTE  |
-| 2B   | Motor de Asientos (Diario) | Fase 2A               | PENDIENTE  |
-| 2C   | Reportes Financieros Core  | Fase 2B               | PENDIENTE  |
-| 3A   | Cuentas por Cobrar (AR)    | Fase 2 completa       | PENDIENTE  |
-| 3B   | Cuentas por Pagar (AP)     | Fase 2 completa       | PENDIENTE  |
-| 4A   | Inventario / Almacenes     | Fase 3B               | PENDIENTE  |
-| 4B   | Compras                    | Fases 3B + 4A         | PENDIENTE  |
-| 5A   | Ventas + CRM               | Fases 3A + 4A         | PENDIENTE  |
-| 6    | RRHH + Nómina              | Fase 2 + 1B           | PENDIENTE  |
-| 7    | Producción + MRP           | Fases 4A + 5A         | PENDIENTE  |
-| 8    | Servicio Técnico           | Fases 4A + 5A         | PENDIENTE  |
-| 9    | Integraciones + API Pública| Fases 3-6 estables    | PENDIENTE  |
-| M    | App Flutter (paralelo)     | Desde Fase 3 en adelante| PENDIENTE|
+> **Estrategia de desarrollo**: Opción B — por módulo completo.
+> Las fases 1B + 2A + 2B + 2C se desarrollan 100% en backend primero (son la columna vertebral).
+> A partir de la Fase 3A cada módulo incluye backend + frontend React antes de pasar al siguiente.
+> Flutter Mobile se desarrolla al final, cuando el frontend web esté completo.
+
+| Fase  | Módulo                          | Capa             | Prerequisito            | Estado                  |
+|-------|---------------------------------|------------------|-------------------------|-------------------------|
+| 0     | Fundación / Monorepo            | —                | —                       | COMPLETADO — 2026-03-11 |
+| 1A    | Multi-Tenant + Empresas         | Backend          | Fase 0                  | COMPLETADO — 2026-03-11 |
+| 1B    | Auth + Usuarios + Licencias     | Backend          | Fase 1A                 | PENDIENTE               |
+| 2A    | Plan de Cuentas + Períodos      | Backend          | Fase 1 completa         | PENDIENTE               |
+| 2B    | Motor de Asientos (Diario)      | Backend          | Fase 2A                 | PENDIENTE               |
+| 2C    | Reportes Financieros Core       | Backend          | Fase 2B                 | PENDIENTE               |
+| 2-UI  | Frontend: Auth + Contabilidad   | Frontend React   | Fases 1B + 2A + 2B + 2C | PENDIENTE               |
+| 3A    | Cuentas por Cobrar (AR)         | Backend+Frontend | Fase 2-UI               | PENDIENTE               |
+| 3B    | Cuentas por Pagar (AP)          | Backend+Frontend | Fase 2-UI               | PENDIENTE               |
+| 4A    | Inventario / Almacenes          | Backend+Frontend | Fase 3B                 | PENDIENTE               |
+| 4B    | Compras                         | Backend+Frontend | Fases 3B + 4A           | PENDIENTE               |
+| 5A    | Ventas + CRM                    | Backend+Frontend | Fases 3A + 4A           | PENDIENTE               |
+| 6     | RRHH + Nómina                   | Backend+Frontend | Fase 2-UI + 1B          | PENDIENTE               |
+| 7     | Producción + MRP                | Backend+Frontend | Fases 4A + 5A           | PENDIENTE               |
+| 8     | Servicio Técnico                | Backend+Frontend | Fases 4A + 5A           | PENDIENTE               |
+| 9     | Integraciones + API Pública     | Backend          | Fases 3-6 estables      | PENDIENTE               |
+| M     | App Flutter                     | Mobile           | Frontend web completo   | PENDIENTE               |
 
 ---
 
@@ -571,7 +577,7 @@ Reglas:
 | 2026-03-11 | Modificación de asientos en período cerrado | Permitida. El período se reabre, se modifica y debe ejecutarse el cierre nuevamente. |
 | 2026-03-11 | Nómina: módulo Core del sistema | Incluida como módulo core, no complementaria. |
 | 2026-03-11 | Activación de módulos SaaS: planes + custom | Planes predefinidos (Basic/Pro/Enterprise) + selección custom de módulos por cliente. |
-| 2026-03-11 | MVP: primero web completo, luego Flutter mobile | App Flutter se desarrolla después del frontend web. |
+| 2026-03-11 | Estrategia frontend: Opción B — por módulo completo | 1B+2A+2B+2C solo backend → luego frontend de contabilidad → cada módulo siguiente: backend+frontend juntos. Flutter al final. |
 | 2026-03-11 | Autenticación: JWT propio en FastAPI | Módulo auth/ con python-jose. Sin servicios externos (Auth0, Supabase Auth, Clerk, etc.). |
 | 2026-03-11 | Repositorio GitHub: SIMUTECHRINKOS/rinkos_erp | https://github.com/SIMUTECHRINKOS/rinkos_erp.git |
 | 2026-03-11 | Control de acceso: modelo de licencias SAP B1 | 4 tipos: Profesional, Logística, Finanzas, CRM. Cuota por tenant. Permisos por usuario. Ver Sección B.6. |
@@ -635,5 +641,5 @@ NO implementar nada relacionado hasta tener respuesta:
 
 ---
 
-*Versión: 1.8 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
+*Versión: 1.9 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
 *Este documento es la autoridad máxima del proyecto. Actualizar en cada sesión.*
