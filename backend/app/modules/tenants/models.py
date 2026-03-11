@@ -1,5 +1,5 @@
 """
-Modelos SQLAlchemy — Fase 1A: Tenants, Companies, Planes de Suscripción.
+Modelos SQLAlchemy — Fase 1A/1B: Tenants, Companies, Planes de Suscripción.
 
 Jerarquía:
   SubscriptionPlan → Tenant (1..N companies) → Company (schema propio)
@@ -21,7 +21,13 @@ class SubscriptionPlan(Base):
     """
     Planes de suscripción disponibles en RINKOS ERP.
     Datos semilla: Basic / Pro / Enterprise.
-    Futura gestión vía portal de administración.
+    Incluye cuota de licencias por tipo confirmada.
+
+    | Plan       | prof | log | fin | crm |
+    |------------|------|-----|-----|-----|
+    | Basic      |  1   |  0  |  1  |  1  |
+    | Pro        |  1   |  2  |  1  |  2  |
+    | Enterprise |  3   |  5  |  2  |  5  |
     """
     __tablename__ = "subscription_plans"
 
@@ -33,6 +39,11 @@ class SubscriptionPlan(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     max_companies: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     max_users: Mapped[int] = mapped_column(Integer, nullable=False, default=5)
+    # Cuota de licencias por tipo
+    quota_professional: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    quota_logistics: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    quota_finance: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    quota_crm: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
@@ -105,8 +116,10 @@ class Company(Base, TimestampMixin):
 class TenantUser(Base, TimestampMixin):
     """
     Usuario del sistema. Pertenece a un tenant.
-    Acceso a empresas específicas vía UserCompanyAccess.
-    Credenciales de auth se completan en Fase 1B.
+    Acceso a empresas específicas vía UserCompanyAccess y UserCompanyLicense.
+
+    is_superuser: solo aplica si el usuario tiene licencia PROFESSIONAL.
+    Con is_superuser=True puede gestionar licencias y configurar permisos.
     """
     __tablename__ = "tenant_users"
 
@@ -118,6 +131,7 @@ class TenantUser(Base, TimestampMixin):
     )
     email: Mapped[str] = mapped_column(String(200), unique=True, nullable=False)
     full_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    hashed_password: Mapped[str] = mapped_column(String(200), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     is_superuser: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_by: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)

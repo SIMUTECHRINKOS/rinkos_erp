@@ -13,6 +13,7 @@ from app.core.database import Base
 
 # Importar todos los modelos para que Alembic los detecte en autogenerate
 import app.modules.tenants.models  # noqa: F401
+import app.modules.auth.models     # noqa: F401
 
 config = context.config
 

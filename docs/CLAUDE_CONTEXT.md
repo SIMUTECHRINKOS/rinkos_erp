@@ -545,7 +545,7 @@ Reglas:
 |-------|---------------------------------|------------------|-------------------------|-------------------------|
 | 0     | Fundación / Monorepo            | —                | —                       | COMPLETADO — 2026-03-11 |
 | 1A    | Multi-Tenant + Empresas         | Backend          | Fase 0                  | COMPLETADO — 2026-03-11 |
-| 1B    | Auth + Usuarios + Licencias     | Backend          | Fase 1A                 | PENDIENTE               |
+| 1B    | Auth + Usuarios + Licencias     | Backend          | Fase 1A                 | COMPLETADO — 2026-03-11 |
 | 2A    | Plan de Cuentas + Períodos      | Backend          | Fase 1 completa         | PENDIENTE               |
 | 2B    | Motor de Asientos (Diario)      | Backend          | Fase 2A                 | PENDIENTE               |
 | 2C    | Reportes Financieros Core       | Backend          | Fase 2B                 | PENDIENTE               |
@@ -611,8 +611,8 @@ NO implementar nada relacionado hasta tener respuesta:
 - [x] ~~¿MVP incluye Flutter desde el inicio?~~ → No. Primero web completo, luego Flutter.
 - [x] ~~Estructura de licencias y permisos~~ → 4 tipos: Profesional/Logística/Finanzas/CRM. Ver Sección B.6.
 - [ ] Reglas de bloqueo adicionales por módulo (se definen módulo a módulo durante el desarrollo)
-- [ ] Catálogo completo de objetos con permisos configurables por módulo (se define en Fase 1B)
-- [ ] Cuota de licencias por tipo en cada plan de suscripción (Basic/Pro/Enterprise) — definir en Fase 1B
+- [x] ~~Catálogo completo de objetos con permisos configurables por módulo~~ → Se puebla módulo a módulo. En Fase 1B se creó la tabla `permission_objects` (vacía al inicio).
+- [x] ~~Cuota de licencias por tipo en cada plan~~ → Basic(1/0/1/1), Pro(1/2/1/2), Enterprise(3/5/2/5). Ver Sección B.6.
 
 ---
 
@@ -647,5 +647,5 @@ NO implementar nada relacionado hasta tener respuesta:
 
 ---
 
-*Versión: 2.0 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
+*Versión: 2.1 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
 *Este documento es la autoridad máxima del proyecto. Actualizar en cada sesión.*
