@@ -183,12 +183,18 @@ TIPOS DE LICENCIA (4 — datos semilla):
   4. CRM          → Módulos: Socios de Negocio (maestro de clientes/proveedores),
                     CRM / Oportunidades, Actividades.
 
-CUOTA DE LICENCIAS POR TENANT:
-  - El plan de suscripción define cuántas licencias de cada tipo tiene el tenant.
-    Ej: 1 Profesional + 2 Logística + 1 Finanzas.
+CUOTA DE LICENCIAS POR PLAN (semilla confirmada):
+
+  | Plan        | Profesional | Logística | Finanzas | CRM |
+  |-------------|-------------|-----------|----------|-----|
+  | Basic       | 1           | 0         | 1        | 1   |
+  | Pro         | 1           | 2         | 1        | 2   |
+  | Enterprise  | 3           | 5         | 2        | 5   |
+
   - La cuota es global para el tenant (no por compañía).
   - El sistema lleva conteo de licencias usadas vs. disponibles por tipo.
   - No se puede asignar más licencias de las contratadas.
+  - La tabla subscription_plans almacena la cuota de cada tipo como columnas.
 
 ASIGNACIÓN DE LICENCIAS A USUARIOS:
   - Un usuario puede tener MÁS DE UN tipo de licencia en una misma compañía.
@@ -641,5 +647,5 @@ NO implementar nada relacionado hasta tener respuesta:
 
 ---
 
-*Versión: 1.9 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
+*Versión: 2.0 | Fecha: 2026-03-11 | Proyecto: RINKOS ERP*
 *Este documento es la autoridad máxima del proyecto. Actualizar en cada sesión.*
